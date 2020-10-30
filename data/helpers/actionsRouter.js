@@ -27,9 +27,10 @@ router.get('/:id', validateActionId, (req, res) => {
   });      
 
 router.get('/', (req, res) => {
-        res.status(200).json(res.post)
-  });      
-  
+        Action.get()
+        .then(res =>{res.status(200).json(res.post)})
+    });      
+
 router.delete('/:id', validateActionId, (req, res) => {
     Action.remove(req.params.id)
     .then(response => {res.status(200).json({message:'The post has been deleted'})})
