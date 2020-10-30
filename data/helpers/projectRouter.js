@@ -15,12 +15,19 @@ router.get('/:id', validateProjectId, (req, res) => {
   });      
 
 router.put('/:id', validateProjectId,validateProject, (req, res) => {
-    Project.update(req.params.id, req.body)
+      Project.update(req.params.id, req.body)
+      .then(response => {
+          console.log("this is my response", response)
+          res.status(200).json({message:'The Project has been updated'}
+      )})
+  }); 
+
+router.post('/', validateProject, (req, res) => {
+    Project.insert(req.body)
     .then(response => {
-        console.log("this is my response", response)
-        res.status(200).json({message:'The Project has been updated'}
+        res.status(200).json({message:'The Action has been added'}
     )})
-}); 
+});
 
 router.delete('/:id', validateProjectId, (req, res) => {
     Project.remove(req.params.id)
@@ -30,23 +37,23 @@ router.delete('/:id', validateProjectId, (req, res) => {
 // middleware babies
 
 function validateProject(req, res, next) {
-    console.log(req.body.project_id)
+    
     if(Object.keys(req.body).includes("description") && req.body.description)
     {
-        if(Object.keys(req.body).includes("project_id") && req.body.project_id==1)
+        if(Object.keys(req.body).includes("name") && req.body.name)
         {
         next()
         }
         else{
-            res.status(404).json({
-                message:"Error getting Project Project ID, must equal 1"
+                res.status(404).json({
+                message:"Error getting Project Project Name, give it a value of ZIGGS"
             }) 
         }
     }
     else
     {
         res.status(404).json({
-            message:"Error getting Project Description, need description and text"
+            message:"Error getting Project Description, need a Zoe and Ziggs!"
         }) 
     }
 }

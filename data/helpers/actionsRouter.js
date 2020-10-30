@@ -5,8 +5,14 @@ const mappers = require('./mappers')
 
 const router = express.Router();
 
-
-
+router.post('/', validateAction, (req, res) => {
+    console.log("made it here")
+    Action.insert(req.body)
+    .then(response => {
+        console.log("this is my response", response)
+        res.status(200).json({message:'The Action has been added'}
+    )})
+});
 
 router.put('/:id', validateActionId,validateAction, (req, res) => {
     Action.update(req.params.id, req.body)
