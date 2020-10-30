@@ -1,9 +1,18 @@
 const express = require('express');
 
 const Project = require('./projectModel')
-const mappers = require('./mappers')
+const mappers = require('./mappers');
 
 const router = express.Router();
+router.get('/', (req, res) => {
+    Project.get()
+    .then(response =>{
+        res.status(200).json(response)
+    })
+  });     
+router.get('/:id', validateProjectId, (req, res) => {
+        res.status(200).json(res.project)
+  });      
 
 router.put('/:id', validateProjectId,validateProject, (req, res) => {
     Project.update(req.params.id, req.body)
@@ -13,14 +22,6 @@ router.put('/:id', validateProjectId,validateProject, (req, res) => {
     )})
 }); 
 
-router.get('/:id', validateProjectId, (req, res) => {
-        res.status(200).json(res.post)
-  });      
-
-router.get('/', (req, res) => {
-        res.status(200).json(res.post)
-  });      
-  
 router.delete('/:id', validateProjectId, (req, res) => {
     Project.remove(req.params.id)
     .then(response => {res.status(200).json({message:'The post has been deleted'})})
@@ -55,7 +56,7 @@ function validateProjectId(req, res, next) {
     .then(post =>{
         console.log("this is going through validator",post)
         if(post){
-            res.post = post
+            res.project = post
             next()
         }
         else
